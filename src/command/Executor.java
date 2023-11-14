@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Executor {
     private Map<CommandType, Command> commands = new HashMap<>();
 
+
     public void addCommand(Command command) {
         commands.put(command.getCommandName(), command);
     }
