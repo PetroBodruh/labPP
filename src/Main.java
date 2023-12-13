@@ -1,46 +1,53 @@
-import command.AssembleBouquetCommand;
-import command.Command;
-import command.FindFlowerByStemLengthCommand;
-import command.SortFlowersCommand;
-import flower.Flower;
+import bouquet.Bouquet;
+import command.*;
+import bouquet.flower.Flower;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<Flower> flowers = new ArrayList<>();
 
-        // Ініціалізація об'єктів-квітів
-        flowers.add(new Flower("Rose", 10.0, 5, 20.0));
-        flowers.add(new Flower("Tulip", 8.0, 4, 15.0));
-        // Додаткові об'єкти-квіти
-
-        List<Command> commands = new ArrayList<>();
-        commands.add(new AssembleBouquetCommand(flowers));
-        commands.add(new SortFlowersCommand(flowers));
-        commands.add(new FindFlowerByStemLengthCommand(flowers));
+        List<Flower> flowerList = new ArrayList<>();
+        List<Bouquet> bouquetsList = new ArrayList<>();
+        Executor executor = new Executor();
+        executor.addCommand(new FindFlowerByStemLengthCommand(bouquetsList));
+        executor.addCommand(new SortFlowersCommand(bouquetsList));
+        executor.addCommand(new HelpCommand(executor));
+        executor.addCommand(new SetBouquetCommand(bouquetsList));
+        executor.addCommand(new ShowCommand(flowerList, bouquetsList));
+        executor.addCommand(new AddAccessoryComand(bouquetsList));
+        executor.addCommand(new AddFlowerCommand(bouquetsList));
+        executor.addCommand(new RemoveAccessoryComand(bouquetsList));
+        executor.addCommand(new RemoveFlowerCommand(bouquetsList));
 
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            // Вивід меню
-            System.out.println("1. Зібрати букет");
-            System.out.println("2. Сортувати квіти у букеті");
-            System.out.println("3. Знайти квітку за діапазоном довжини стебла");
-            System.out.println("0. Вихід");
+            String input = scanner.nextLine();
+            int firstSpaceIndex = input.indexOf(' ');
+            String firstElement;
+            String param;
 
-            int choice = scanner.nextInt();
-
-            if (choice == 0) {
-                break;
-            } else if (choice > 0 && choice <= commands.size()) {
-                commands.get(choice - 1).execute();
+            if (firstSpaceIndex != -1) {
+                firstElement = input.substring(0, firstSpaceIndex);
+                param = input.substring(firstSpaceIndex + 1).trim();
             } else {
-                System.out.println("Невірний вибір. Спробуйте ще раз.");
+                firstElement = input;
+                param = "";
             }
+            if (!firstElement.isEmpty()) {
+                if (!Objects.equals(firstElement, "exit")) {
+                    executor.executeCommand(firstElement, param);
+                } else {
+                    break;
+                }
+            }
+
         }
 
-        scanner.close();
-    }}
+
+    }
+}

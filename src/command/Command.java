@@ -1,6 +1,9 @@
 package command;
 
 public interface Command {
-    void execute();
-    void getCommandName();
+    void execute(String params);
+    String getCommandName();
+    default String getDesc() {
+        return "null";
+    }
 }
