@@ -1,4 +1,4 @@
-package flower;
+package bouquet.flower;
 
 public class Flower {
     String name;
@@ -11,5 +11,17 @@ public class Flower {
         this.price = price;
         this.freshnessLevel = freshnessLevel;
         this.stemLength = stemLength;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getFreshnessLevel() {
+        return freshnessLevel;
+    }
+
+    public double getStemLength() {
+        return stemLength;
     }
 }
